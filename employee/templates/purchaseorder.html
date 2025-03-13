@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Order Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h2>Purchase Order Form</h2>
+        <form>
+        <!-- Company Details -->
+        <select name="company_id" onchange="this.form.submit()">
+                <option value="">Select Company</option>
+                {% for company in companies %}
+                <option value="{{ company.id }}"
+                    {% if company == selected_company %}selected{% endif %}>
+                        {{ company.company_name }}
+                    </option>
+                {% endfor %}
+            </select>
+            
+        <!-- Location Selection Dropdown (only shows if company selected) -->
+            {% if locations %}
+            <select name="location_id" onchange="this.form.submit()">
+                    <option value="">Select Location</option>
+                    {% for location in locations %}
+                    <option value="{{ location.id }}"
+                        {% if location == selected_location %}selected{% endif %}>
+                            {{ location.address }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+            
+        <!-- Display GST if location is selected -->
+            {% if selected_location %}
+            <div>
+                GST Number: {{ selected_location.company_gst }}
+                </div>
+            {% endif %}
+            
+        <!-- Display contacts if available -->
+            {% if contacts %}
+            <div>
+                    <h3>Contacts:</h3>
+                    {% for contact in contacts %}
+                        <p>{{ contact.contact_person }} - {{ contact.phone_number }} - {{ contact.email }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+        <!-- Purchase Order Details -->
+            <h3>Purchase Order Items</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Item Name</th>
+                        <th>Item Details</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orderItems">
+                    <tr>
+                        <td>1</td>
+                    <td><input type="text" class="form-control" placeholder="Item Name"></td>
+                    <td><textarea class="form-control" rows="1" placeholder="Item Details"></textarea></td>
+                    <td><input type="number" class="form-control" placeholder="Quantity"></td>
+                        <td><button type="button" class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" id="addRow">Add Row</button>
+            
+            <!-- Order Receive Options -->
+            <h3>How would you like to receive the order?</h3>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="receiveOption" id="emailOption">
+                <label class="form-check-label" for="emailOption">Email</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="receiveOption" id="whatsappOption">
+                <label class="form-check-label" for="whatsappOption">WhatsApp</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="receiveOption" id="otherOption">
+                <label class="form-check-label" for="otherOption">Other</label>
+            </div>
+            
+        <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <script>
+        document.getElementById('addRow').addEventListener('click', function() {
+            var table = document.getElementById('orderItems');
+            var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+
+        cell1.innerHTML = table.rows.length;
+        cell2.innerHTML = '<input type="text" class="form-control" placeholder="Item Name">';
+        cell3.innerHTML = '<textarea class="form-control" rows="1" placeholder="Item Details"></textarea>';
+        cell4.innerHTML = '<input type="number" class="form-control" placeholder="Quantity">';
+        cell5.innerHTML = '<button type="button" class="btn btn-danger" onclick="deleteRow(this)">Delete</button>';
+        });
+
+        function deleteRow(r) {
+        var i = r.parentNode.parentNode.rowIndex;
+        document.getElementById('orderItems').deleteRow(i - 1); // Subtract 1 because rowIndex is 1-based
+    }
+
+    document.getElementById('companyName').addEventListener('change', function() {
+        var companyName = this.value;
+        var companies = [
+            {% for company in companies %}
+            { name: "{{ company.company_name }}", location: "{{ company.address }}", gst: "{{ company.company_gst }}", contact: "{{ company.contact_person }}" },
+            {% endfor %}
+        ];
+
+        var selectedCompany = companies.find(c => c.name === companyName);
+        if (selectedCompany) {
+            document.getElementById('companyLocation').value = selectedCompany.location;
+            document.getElementById('companyGST').value = selectedCompany.gst;
+            document.getElementById('contactPerson').value = selectedCompany.contact;
+        } else {
+            document.getElementById('companyLocation').value = '';
+            document.getElementById('companyGST').value = '';
+            document.getElementById('contactPerson').value = '';
+        }
+    });
+    </script>
+
+</body>
+</html>

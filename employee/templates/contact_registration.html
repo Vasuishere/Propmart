@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Registration</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Contact Registration</h1>
+    </header>
+    <main>
+        <h4>Contact Details for {{ location.location_name }}</h4>
+        <form method="POST">
+            {% csrf_token %}
+            {{ contact_form.as_p }}
+            <button type="submit" class="btn btn-success">Register</button>
+        </form>
+
+        
+    </main>
+    <footer>
+        <p>&copy; 2023 PropMart</p>
+    </footer>
+</body>
+</html>

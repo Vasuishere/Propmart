@@ -22,9 +22,13 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('vendor_registration', views.vendor_registration, name='vendor_registration'),
+    path('vendor-registration/', views.vendor_registration, name='vendor_registration'),
+    path('location-registration/<int:vendor_id>/', views.location_registration, name='location_registration'),
+    path('contact-registration/<int:location_id>/', views.contact_registration, name='contact_registration'),
     path('purchase_order_view', views.purchase_order_view, name='purchase_order_view'),
     path('about/', views.about, name='about'),
+    path('demo/', views.demo, name='demo'),
     path('', views.index, name='index'),
     path('contact/', views.contact, name='contact'),
+    path('vendor-registration/', views.vendor_registration, name='vendor_registration'),
 ]

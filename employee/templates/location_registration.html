@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Registration</title>
+</head>
+<body>
+    <header>
+        <h1>Register a New Location</h1>
+    </header>
+    <main>
+        <h4>Location Details for {{ vendor.company_name }}</h4>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ location_form.as_p }}
+    <button type="submit" class="btn btn-primary">Next</button>
+</form>
+
+        
+    </main>
+    <footer>
+        <p>&copy; 2023 PropMart</p>
+    </footer>
+</body>
+</html>

@@ -1,5 +1,5 @@
 # views.py
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from .forms import VendorRegistrationForm,VendorLocationForm,LocationContactForm
 from .models import VendorRegistration,VendorLocation,LocationContact
 from django.contrib import messages
@@ -9,30 +9,53 @@ from .models import PurchaseOrder, PurchaseOrderItem# If renamed
 def vendor_registration(request):
     if request.method == 'POST':
         vendor_form = VendorRegistrationForm(request.POST)
-        location_form = VendorLocationForm(request.POST)
-        contact_form = LocationContactForm(request.POST)
-
-        if vendor_form.is_valid() and location_form.is_valid() and contact_form.is_valid():
-            vendor = vendor_form.save()  # Save vendor first
-            location = location_form.save(commit=False)  # Don't save yet
-            location.vendor = vendor  # Link location to vendor
-            location.save()  # Save location
-            
-            contact = contact_form.save(commit=False)  # Don't save yet
-            contact.location = location  # Link contact to location
-            contact.save()  # Save contact
-
-            return redirect('success_url')  # Replace with your actual success page
+        if vendor_form.is_valid():
+            vendor = vendor_form.save()
+            return redirect('location_registration', vendor_id=vendor.id)  # Redirect with vendor_id
 
     else:
         vendor_form = VendorRegistrationForm()
+
+    return render(request, 'vendor_registration.html', {'vendor_form': vendor_form})
+
+# STEP 2: Location Registration
+def location_registration(request, vendor_id):
+    vendor = get_object_or_404(VendorRegistration, id=vendor_id)
+
+    if request.method == 'POST':
+        location_form = VendorLocationForm(request.POST)
+        if location_form.is_valid():
+            location = location_form.save(commit=False)
+            location.vendor = vendor  # Link location to selected vendor
+            location.save()
+            return redirect('contact_registration', location_id=location.id)  # Redirect with location_id
+
+    else:
         location_form = VendorLocationForm()
+
+    return render(request, 'location_registration.html', {
+        'location_form': location_form,
+        'vendor': vendor
+    })
+
+# STEP 3: Contact Registration
+def contact_registration(request, location_id):
+    location = get_object_or_404(VendorLocation, id=location_id)
+
+    if request.method == 'POST':
+        contact_form = LocationContactForm(request.POST)
+        if contact_form.is_valid():
+            contact = contact_form.save(commit=False)
+            contact.location = location  # Link contact to selected location
+            contact.save()
+            return redirect('')  # Redirect to success page
+
+    else:
         contact_form = LocationContactForm()
 
-    return render(request, 'vendor_registration.html', {
-        'vendor_form': vendor_form,
-        'location_form': location_form,
-        'contact_form': contact_form
+    return render(request, 'contact_registration.html', {
+        'contact_form': contact_form,
+        'location': location
     })
 
 def index(request):
@@ -54,8 +77,9 @@ def purchase_order_view(request):
     contacts = None
     selected_company = None
     selected_location = None
+    gst_list = None
     
-    # Get selected company ID from request (could be from GET or POST)
+    # Get selected company ID from request
     company_id = request.GET.get('company_id')
     
     if company_id:
@@ -74,28 +98,41 @@ def purchase_order_view(request):
             # Get selected location if provided
             location_id = request.GET.get('location_id')
             if location_id:
-                selected_location = VendorLocation.objects.get(
-                    id=location_id,
-                    vendor=selected_company,
-                    is_active=True
-                )
-                # Get contacts for selected location
-                contacts = LocationContact.objects.filter(
-                    location=selected_location,
-                    is_active=True
-                )
-                
+                try:
+                    selected_location = VendorLocation.objects.get(
+                        id=location_id,
+                        vendor=selected_company,
+                        is_active=True
+                    )
+                    # Get contacts for selected location
+                    contacts = LocationContact.objects.filter(
+                        location=selected_location,
+                        is_active=True
+                    )
+                    # Split GST numbers if they exist
+                    if selected_location.company_gst:
+                        gst_list = selected_location.company_gst.split(',')
+                    else:
+                        gst_list = []
+                except VendorLocation.DoesNotExist:
+                    # Handle case where location doesn't exist
+                    selected_location = None
+                    
         except VendorRegistration.DoesNotExist:
             # Handle case where company doesn't exist
-            pass
-        except VendorLocation.DoesNotExist:
-            # Handle case where location doesn't exist
-            pass
+            selected_company = None
+            locations = None
 
-    return render(request, 'purchaseorder.html', {
+    context = {
         'companies': companies,
         'locations': locations,
         'contacts': contacts,
         'selected_company': selected_company,
         'selected_location': selected_location,
-    })
+        'gst_list': gst_list,
+    }
+    
+    return render(request, 'purchaseorder.html', context)
+
+def demo(request):
+    return render(request,'demo.html')

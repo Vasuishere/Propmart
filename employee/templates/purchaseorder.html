@@ -4,57 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Purchase Order Form</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" 
+        rel="stylesheet" 
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" 
+        crossorigin="anonymous">
 </head>
 <body>
-
     <div class="container mt-5">
         <h2>Purchase Order Form</h2>
         <form>
-        <!-- Company Details -->
-        <select name="company_id" onchange="this.form.submit()">
-                <option value="">Select Company</option>
-                {% for company in companies %}
-                <option value="{{ company.id }}"
-                    {% if company == selected_company %}selected{% endif %}>
-                        {{ company.company_name }}
-                    </option>
-                {% endfor %}
-            </select>
+            <!-- Company Details -->
+            <div class="row">
+                <!-- Company Dropdown -->
+                <div class="col-md-6">
+                    <label for="companySelect">Select Company:</label>
+                    <select id="companySelect" name="company_id" class="form-control" onchange="this.form.submit()">
+                        <option value="">Select Company</option>
+                        {% for company in companies %}
+                            <option value="{{ company.id }}"
+                                {% if company == selected_company %}selected{% endif %}>
+                                {{ company.company_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
             
-        <!-- Location Selection Dropdown (only shows if company selected) -->
-            {% if locations %}
-            <select name="location_id" onchange="this.form.submit()">
-                    <option value="">Select Location</option>
-                    {% for location in locations %}
-                    <option value="{{ location.id }}"
-                        {% if location == selected_location %}selected{% endif %}>
-                            {{ location.address }}
-                        </option>
-                    {% endfor %}
-                </select>
-            {% endif %}
+                <!-- Location Dropdown (Shown only if locations exist) -->
+                {% if locations %}
+                <div class="col-md-6">
+                    <label for="locationSelect">Select Location:</label>
+                    <select id="locationSelect" name="location_id" class="form-control" onchange="this.form.submit()">
+                        <option value="">Select Location</option>
+                        {% for location in locations %}
+                            <option value="{{ location.id }}"
+                                {% if location == selected_location %}selected{% endif %}>
+                                {{ location.address }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+            </div>
             
-        <!-- Display GST if location is selected -->
             {% if selected_location %}
-            <div>
-                GST Number: {{ selected_location.company_gst }}
+            <div class="row">
+                <!-- GST Dropdown -->
+                <div class="col-md-6">
+                    <label for="gstDropdown">Select GST Number:</label>
+                    <select id="gstDropdown" class="form-control">
+                        <option value="">Select GST</option>
+                        {% for gst in gst_list %}
+                            <option value="{{ gst }}">{{ gst }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
+
+                <!-- Contact Dropdown -->
+                <div class="col-md-6">
+                    <label for="contactDropdown">Select Contact:</label>
+                    <select id="contactDropdown" class="form-control" name="contact_id">
+                        <option value="">Select Contact</option>
+                        {% for contact in contacts %}
+                            <option value="{{ contact.id }}">
+                                {{ contact.contact_person }} - {{ contact.contact_number }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
             {% endif %}
             
-        <!-- Display contacts if available -->
-            {% if contacts %}
-            <div>
-                    <h3>Contacts:</h3>
-                    {% for contact in contacts %}
-                        <p>{{ contact.contact_person }} - {{ contact.phone_number }} - {{ contact.email }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            
-        <!-- Purchase Order Details -->
+            <!-- Purchase Order Details -->
             <h3>Purchase Order Items</h3>
-            <table class="table table-striped">
+            <table class="table table-striped ">
                 <thead>
                     <tr>
                         <th>Sr. No.</th>
@@ -67,9 +89,9 @@
                 <tbody id="orderItems">
                     <tr>
                         <td>1</td>
-                    <td><input type="text" class="form-control" placeholder="Item Name"></td>
-                    <td><textarea class="form-control" rows="1" placeholder="Item Details"></textarea></td>
-                    <td><input type="number" class="form-control" placeholder="Quantity"></td>
+                        <td><input type="text" class="form-control" placeholder="Item Name"></td>
+                        <td><textarea class="form-control" rows="1" placeholder="Item Details"></textarea></td>
+                        <td><input type="number" class="form-control" placeholder="Quantity"></td>
                         <td><button type="button" class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
                     </tr>
                 </tbody>
@@ -91,54 +113,89 @@
                 <label class="form-check-label" for="otherOption">Other</label>
             </div>
             
-        <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
     
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
+            crossorigin="anonymous"></script>
 
     <script>
-        document.getElementById('addRow').addEventListener('click', function() {
+        document.getElementById('addRow').addEventListener('click', function () {
             var table = document.getElementById('orderItems');
             var row = table.insertRow(-1);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-        var cell5 = row.insertCell(4);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+        
+            cell1.innerHTML = table.rows.length; // Assign serial number dynamically
+            cell2.innerHTML = '<input type="text" class="form-control" placeholder="Item Name">';
+            cell3.innerHTML = '<textarea class="form-control" rows="1" placeholder="Item Details"></textarea>';
+            cell4.innerHTML = '<input type="number" class="form-control" placeholder="Quantity">';
+            cell5.innerHTML = '<button type="button" class="btn btn-danger" onclick="deleteRow(this)">Delete</button>';
+        });
+        
+        function deleteRow(r) {
+            var table = document.getElementById('orderItems');
+            var rowIndex = r.parentNode.parentNode.rowIndex;
+        
+            // Delete the row
+            table.deleteRow(rowIndex - 1); // Adjust for 1-based index
+        
+            // Recalculate serial numbers
+            updateSerialNumbers();
+        }
+        
+        function updateSerialNumbers() {
+            var table = document.getElementById('orderItems');
+            for (var i = 0; i < table.rows.length; i++) {
+                table.rows[i].cells[0].innerHTML = i + 1; // Update Sr. No.
+            }
+        }
+        
+        document.getElementById('companyName').addEventListener('change', function() {
+            var companyName = this.value;
+            var companies = [
+                {% for company in companies %}
+                { name: "{{ company.company_name }}", location: "{{ company.address }}", gst: "{{ company.company_gst }}", contact: "{{ company.contact_person }}" },
+                {% endfor %}
+            ];
 
-        cell1.innerHTML = table.rows.length;
-        cell2.innerHTML = '<input type="text" class="form-control" placeholder="Item Name">';
-        cell3.innerHTML = '<textarea class="form-control" rows="1" placeholder="Item Details"></textarea>';
-        cell4.innerHTML = '<input type="number" class="form-control" placeholder="Quantity">';
-        cell5.innerHTML = '<button type="button" class="btn btn-danger" onclick="deleteRow(this)">Delete</button>';
+            var selectedCompany = companies.find(c => c.name === companyName);
+            if (selectedCompany) {
+                document.getElementById('companyLocation').value = selectedCompany.location;
+                document.getElementById('companyGST').value = selectedCompany.gst;
+                document.getElementById('contactPerson').value = selectedCompany.contact;
+            } else {
+                document.getElementById('companyLocation').value = '';
+                document.getElementById('companyGST').value = '';
+                document.getElementById('contactPerson').value = '';
+            }
         });
 
-        function deleteRow(r) {
-        var i = r.parentNode.parentNode.rowIndex;
-        document.getElementById('orderItems').deleteRow(i - 1); // Subtract 1 because rowIndex is 1-based
-    }
-
-    document.getElementById('companyName').addEventListener('change', function() {
-        var companyName = this.value;
-        var companies = [
-            {% for company in companies %}
-            { name: "{{ company.company_name }}", location: "{{ company.address }}", gst: "{{ company.company_gst }}", contact: "{{ company.contact_person }}" },
-            {% endfor %}
-        ];
-
-        var selectedCompany = companies.find(c => c.name === companyName);
-        if (selectedCompany) {
-            document.getElementById('companyLocation').value = selectedCompany.location;
-            document.getElementById('companyGST').value = selectedCompany.gst;
-            document.getElementById('contactPerson').value = selectedCompany.contact;
-        } else {
-            document.getElementById('companyLocation').value = '';
-            document.getElementById('companyGST').value = '';
-            document.getElementById('contactPerson').value = '';
-        }
-    });
+        document.addEventListener('DOMContentLoaded', function () {
+            var gstDropdown = document.getElementById('gstDropdown');
+            var gstInput = document.getElementById('gstInput');
+            var contactDropdown = document.getElementById('contactDropdown');
+    
+            if (gstDropdown) {
+                gstDropdown.addEventListener('change', function () {
+                    gstInput.value = this.value;
+                    gstInput.removeAttribute('readonly');
+                });
+            }
+    
+            // Optional: Add contact selection handling if needed
+            if (contactDropdown) {
+                contactDropdown.addEventListener('change', function () {
+                    // Add any contact-specific handling here if needed
+                    console.log('Selected contact ID:', this.value);
+                });
+            }
+        });
     </script>
-
 </body>
 </html>

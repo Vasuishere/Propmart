@@ -1,6 +1,4 @@
 from django.db import models
-from django.core.exceptions import ValidationError
-from django.db.models import Q, UniqueConstraint
 
 class VendorRegistration(models.Model):
     company_name = models.CharField(
@@ -40,7 +38,7 @@ class VendorLocation(models.Model):
     )
     address = models.TextField(help_text="Complete location address")
     company_gst = models.CharField(
-        max_length=30, help_text="GST number specific to this location (15-30 characters)"
+        max_length=15, unique=True, help_text="GST number specific to this location (15 characters)"
     )
     created_at = models.DateTimeField(auto_now_add=True, help_text="Date when location was added")
     updated_at = models.DateTimeField(auto_now=True, help_text="Date when location details were last updated")
@@ -50,37 +48,9 @@ class VendorLocation(models.Model):
         verbose_name = "Vendor Location"
         verbose_name_plural = "Vendor Locations"
         ordering = ["location_name"]
-        # We'll use a unique_together constraint to ensure no duplicate GST-vendor combinations
-        unique_together = [('vendor', 'company_gst')]
 
     def __str__(self):
         return f"{self.vendor.company_name} - {self.location_name}"
-
-    def clean(self):
-        super().clean()
-        if not self.company_gst:
-            return
-            
-        # Check if this GST is used by any other vendor - but only if this is a new record
-        # or if the GST has changed
-        if not self.pk or VendorLocation.objects.get(pk=self.pk).company_gst != self.company_gst:
-            others = VendorLocation.objects.filter(
-                company_gst=self.company_gst
-            ).exclude(vendor=self.vendor)
-            
-            if others.exists():
-                vendor_names = set(loc.vendor.company_name for loc in others)
-                raise ValidationError({
-                    'company_gst': f"This GST number ({self.company_gst}) is already used by: {', '.join(vendor_names)}. "
-                                  f"A GST number cannot be shared between different vendors."
-                })
-        
-        # Check if duplicate GST exists for the same vendor
-        if not self.pk:  # Only check for new records
-            if VendorLocation.objects.filter(vendor=self.vendor, company_gst=self.company_gst).exists():
-                raise ValidationError({
-                    'company_gst': f"This vendor already has a location with GST number {self.company_gst}."
-                })
 
 
 class LocationContact(models.Model):

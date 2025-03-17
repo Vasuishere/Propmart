@@ -21,7 +21,6 @@ def vendor_registration(request):
 # STEP 2: Location Registration
 def location_registration(request, vendor_id):
     vendor = get_object_or_404(VendorRegistration, id=vendor_id)
-
     if request.method == 'POST':
         location_form = VendorLocationForm(request.POST)
         if location_form.is_valid():
@@ -61,8 +60,8 @@ def contact_registration(request, location_id):
 def index(request):
     return render(request, 'index.html')
 
-def about(request):
-    return render(request, 'about.html')
+def company(request):
+    return render(request, 'company.html')
 
 def contact(request):
     return render(request, 'contact.html')

@@ -61,7 +61,36 @@ def index(request):
     return render(request, 'index.html')
 
 def company(request):
-    return render(request, 'company.html')
+    cmp = VendorRegistration.objects.all()
+    context = {
+        'cmp': cmp,
+    }    
+    return render(request, 'company.html', context)
+
+def company_details(request, cmp_id):
+    """
+    View function to display vendor/company details
+    """
+    vendor = get_object_or_404(VendorRegistration, id=cmp_id)
+    locations = VendorLocation.objects.filter(vendor=vendor)
+    
+    # Check if a location is selected
+    location_id = request.GET.get('location_id')
+    selected_location = None
+    contacts = None
+    
+    if location_id:
+        selected_location = get_object_or_404(VendorLocation, id=location_id, vendor=vendor)
+        contacts = LocationContact.objects.filter(location=selected_location)
+    
+    context = {
+        'vendor': vendor,
+        'locations': locations,
+        'selected_location': selected_location,
+        'contacts': contacts,
+    }
+    
+    return render(request, 'company_details.html', context)
 
 def contact(request):
     return render(request, 'contact.html')

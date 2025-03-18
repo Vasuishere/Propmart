@@ -11,7 +11,7 @@ def vendor_registration(request):
         vendor_form = VendorRegistrationForm(request.POST)
         if vendor_form.is_valid():
             vendor = vendor_form.save()
-            return redirect('location_registration', vendor_id=vendor.id)  # Redirect with vendor_id
+            return redirect('location_registration', cmp_id=vendor.id)  # Redirect with vendor_id
 
     else:
         vendor_form = VendorRegistrationForm()
@@ -19,23 +19,25 @@ def vendor_registration(request):
     return render(request, 'vendor_registration.html', {'vendor_form': vendor_form})
 
 # STEP 2: Location Registration
-def location_registration(request, vendor_id):
-    vendor = get_object_or_404(VendorRegistration, id=vendor_id)
+def location_registration(request, cmp_id):
+    vendor = get_object_or_404(VendorRegistration, id=cmp_id)
+
     if request.method == 'POST':
-        location_form = VendorLocationForm(request.POST)
+        location_form = VendorLocationForm(request.POST, vendor=vendor)
         if location_form.is_valid():
             location = location_form.save(commit=False)
-            location.vendor = vendor  # Link location to selected vendor
+            location.vendor = vendor  # Always set the vendor from the URL
             location.save()
-            return redirect('contact_registration', location_id=location.id)  # Redirect with location_id
+            return redirect('company_details', vendor.id)
 
     else:
-        location_form = VendorLocationForm()
+        location_form = VendorLocationForm(vendor=vendor)
 
     return render(request, 'location_registration.html', {
         'location_form': location_form,
         'vendor': vendor
     })
+
 
 # STEP 3: Contact Registration
 def contact_registration(request, location_id):
@@ -47,7 +49,8 @@ def contact_registration(request, location_id):
             contact = contact_form.save(commit=False)
             contact.location = location  # Link contact to selected location
             contact.save()
-            return redirect('')  # Redirect to success page
+            # Redirect to company details page with the vendor ID
+            return redirect('company_details', location.vendor.id)
 
     else:
         contact_form = LocationContactForm()

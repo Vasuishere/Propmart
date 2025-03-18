@@ -11,10 +11,27 @@ class VendorRegistrationForm(forms.ModelForm):
 class VendorLocationForm(forms.ModelForm):
     class Meta:
         model = VendorLocation
-        fields = ['vendor', 'location_name', 'address', 'company_gst']
+        fields = ['location_name', 'address', 'company_gst']
+        widgets = {
+            'location_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter location name'}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter address'}),
+            'company_gst': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter GST number'}),
+        }  # Remove vendor from default fields
+
+    def __init__(self, *args, **kwargs):
+        vendor = kwargs.pop('vendor', None)
+        super(VendorLocationForm, self).__init__(*args, **kwargs)
+        
+        if not vendor:
+            # Add vendor field only if no vendor is pre-selected
+            self.fields['vendor'] = forms.ModelChoiceField(
+                queryset=VendorRegistration.objects.all(),
+                label="Company"
+            )
     
 # Form for LocationContact (Contact details per location)
 class LocationContactForm(forms.ModelForm):
     class Meta:
         model = LocationContact
-        fields = ['location', 'contact_person', 'phone_number', 'email']
+        fields = ['contact_person', 'phone_number', 'email']
+        # Removed 'location' since it's set in the view

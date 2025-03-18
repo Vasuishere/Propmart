@@ -103,6 +103,7 @@
                                     </div>
                                 </div>
                                 
+                                
                                 <div id="locationDetails" class="mt-4">
                                     {% if selected_location %}
                                         <div class="row">
@@ -133,25 +134,26 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    {% else %}
+                                        <a href="{% url 'location_registration' vendor.id %}" class="btn btn-primary float-end">Add Address</a>
+                                        {% else %}
                                         <div class="alert alert-info">
                                             Please select a location to view details.
                                         </div>
-                                    {% endif %}
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Contact Details Section -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title mb-4">Contact Details</h5>
-                                <div id="contactDetails">
-                                    {% if selected_location and contacts %}
+                    
+                    <!-- Contact Details Section -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">Contact Details</h5>
+                                    <div id="contactDetails">
+                                        {% if selected_location and contacts %}
                                         <div class="table-responsive">
                                             <table class="table table-striped">
                                                 <thead>
@@ -164,27 +166,32 @@
                                                 </thead>
                                                 <tbody>
                                                     {% for contact in contacts %}
-                                                        <tr>
-                                                            <td>{{ contact.contact_person }}</td>
-                                                            <td>{{ contact.email|default:"N/A" }}</td>
-                                                            <td>{{ contact.phone_number|default:"N/A" }}</td>
-                                                            <td>
-                                                                {% if contact.is_active %}
-                                                                    <span class="badge bg-success">Active</span>
-                                                                {% else %}
-                                                                    <span class="badge bg-danger">Inactive</span>
-                                                                {% endif %}
-                                                            </td>
-                                                        </tr>
+                                                    <tr>
+                                                        <td>{{ contact.contact_person }}</td>
+                                                        <td>{{ contact.email|default:"N/A" }}</td>
+                                                        <td>{{ contact.phone_number|default:"N/A" }}</td>
+                                                        <td>
+                                                            {% if contact.is_active %}
+                                                            <span class="badge bg-success">Active</span>
+                                                            {% else %}
+                                                            <span class="badge bg-danger">Inactive</span>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
                                                     {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
-                                    {% elif selected_location and not contacts %}
+                                        {% elif selected_location and not contacts %}
                                         <div class="alert alert-warning">No contacts found for this location.</div>
-                                    {% else %}
+                                        {% else %}
                                         <div class="alert alert-info">Select a location to view contact details.</div>
-                                    {% endif %}
+                                        {% endif %}
+                                        {% if selected_location %}
+    <a href="{% url 'contact_registration' selected_location.id %}" class="btn btn-primary">Add Contact</a>
+{% else %}
+    <button class="btn btn-primary" disabled>Add Contact</button>
+{% endif %}
                                 </div>
                             </div>
                         </div>

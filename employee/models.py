@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class VendorRegistration(models.Model):
     company_name = models.CharField(
         max_length=200, unique=True, help_text="Name of the company"
@@ -61,6 +62,7 @@ class LocationContact(models.Model):
         help_text="Location to which this contact belongs",
     )
     contact_person = models.CharField(max_length=100, help_text="Name of the contact person")
+    Position = models.CharField(max_length=30, help_text="Job Profile Name (e.g: HPD , PDH)")
     phone_number = models.CharField(
         max_length=15, blank=True, null=True, help_text="Contact phone number"
     )
@@ -77,7 +79,7 @@ class LocationContact(models.Model):
         ordering = ["contact_person"]
 
     def __str__(self):
-        return f"Contact for {self.location.vendor.company_name} - {self.location.location_name}"
+        return f"Contact for {self.location.vendor.company_name} - {self.location.location_name} - {self.contact_person}"
 
 
 class PurchaseOrder(models.Model):
@@ -115,3 +117,31 @@ class PurchaseOrderItem(models.Model):
 
     def __str__(self):
         return f"{self.item_name} (x{self.quantity})"
+    
+    
+
+
+
+
+class Employee(models.Model):
+    full_name = models.CharField(max_length=100, help_text="Enter You Name")
+    job_title = models.CharField(max_length=100)
+    department = models.CharField(max_length=100)
+    employee_id = models.CharField(max_length=50, unique=True)
+    contact_email = models.EmailField(unique=True)
+    contact_phone = models.CharField(max_length=15)
+    start_date = models.DateField()
+    work_location = models.CharField(max_length=255)
+    emergency_contact_name = models.CharField(max_length=100)
+    emergency_contact_phone = models.CharField(max_length=15)
+    Manager = models.CharField(max_length=100)
+    salary = models.DecimalField(max_digits=10, decimal_places=2)
+    bank_account = models.CharField(max_length=50)
+    personal_id = models.CharField(max_length=50, unique=True)  # SSN, Aadhaar, etc.
+    education = models.CharField(max_length=255)
+    profile_photo = models.ImageField(upload_to='profile_photos/', blank=True, null=True)
+
+    def __str__(self):
+        return self.full_name
+
+

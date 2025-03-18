@@ -160,6 +160,7 @@
                                                     <tr>
                                                         <th>Name</th>
                                                         <th>Email</th>
+                                                        <th>Position</th>
                                                         <th>Phone</th>
                                                         <th>Status</th>
                                                     </tr>
@@ -169,6 +170,7 @@
                                                     <tr>
                                                         <td>{{ contact.contact_person }}</td>
                                                         <td>{{ contact.email|default:"N/A" }}</td>
+                                                        <td>{{ contact.Position|default:"N/A" }}</td>
                                                         <td>{{ contact.phone_number|default:"N/A" }}</td>
                                                         <td>
                                                             {% if contact.is_active %}

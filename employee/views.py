@@ -1,9 +1,7 @@
 # views.py
 from django.shortcuts import render, redirect,get_object_or_404
-from .forms import VendorRegistrationForm,VendorLocationForm,LocationContactForm
+from .forms import VendorRegistrationForm,VendorLocationForm,LocationContactForm,EmployeeForm
 from .models import VendorRegistration,VendorLocation,LocationContact
-from django.contrib import messages
-from .models import PurchaseOrder, PurchaseOrderItem# If renamed
 
 
 def vendor_registration(request):
@@ -167,3 +165,15 @@ def purchase_order_view(request):
 
 def demo(request):
     return render(request,'demo.html')
+
+
+def register_employee(request):
+    if request.method == "POST":
+        form = EmployeeForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('success_page')  # Change to your success URL
+    else:
+        form = EmployeeForm()
+
+    return render(request, 'employee_registration.html', {'form': form})

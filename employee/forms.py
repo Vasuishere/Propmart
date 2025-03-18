@@ -1,5 +1,5 @@
 from django import forms
-from .models import VendorRegistration, VendorLocation, LocationContact
+from .models import VendorRegistration, VendorLocation, LocationContact,Employee
 
 # Form for VendorRegistration (Company-level details)
 class VendorRegistrationForm(forms.ModelForm):
@@ -33,5 +33,13 @@ class VendorLocationForm(forms.ModelForm):
 class LocationContactForm(forms.ModelForm):
     class Meta:
         model = LocationContact
-        fields = ['contact_person', 'phone_number', 'email']
+        fields = ['contact_person', 'phone_number','Position', 'email']
         # Removed 'location' since it's set in the view
+
+from django import forms
+from .models import Employee
+
+class EmployeeForm(forms.ModelForm):
+    class Meta:
+        model = Employee
+        fields = '__all__'

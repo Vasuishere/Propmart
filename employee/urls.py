@@ -28,6 +28,7 @@ urlpatterns = [
     path('purchase_order_view', views.purchase_order_view, name='purchase_order_view'),
     path('company/', views.company, name='company'),
     path('company_details/<int:cmp_id>/', views.company_details, name='company_details'),
+    path('register/', views.register_employee, name='register_employee'),
     path('demo/', views.demo, name='demo'),
     path('', views.index, name='index'),
     path('contact/', views.contact, name='contact'),

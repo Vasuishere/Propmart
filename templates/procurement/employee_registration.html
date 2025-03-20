@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="background-color: #f8f9fa;">
+
+    <div class="container mt-5">
+        <div class="card shadow p-4" style="max-width: 800px; margin: auto;">
+            <h2 class="text-center text-primary mb-4">Employee Registration</h2>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" name="full_name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Job Title</label>
+                    <input type="text" class="form-control" name="job_title" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Department</label>
+                    <input type="text" class="form-control" name="department" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Employee ID</label>
+                    <input type="text" class="form-control" name="employee_id" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Work Email</label>
+                    <input type="email" class="form-control" name="contact_email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Work Phone</label>
+                    <input type="text" class="form-control" name="contact_phone" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" class="form-control" name="start_date" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Work Location</label>
+                    <input type="text" class="form-control" name="work_location" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Emergency Contact Name</label>
+                    <input type="text" class="form-control" name="emergency_contact_name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Emergency Contact Phone</label>
+                    <input type="text" class="form-control" name="emergency_contact_phone" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Supervisor</label>
+                    <input type="text" class="form-control" name="supervisor" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Salary</label>
+                    <input type="number" class="form-control" name="salary" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Bank Account Number</label>
+                    <input type="text" class="form-control" name="bank_account" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Personal ID (SSN/Aadhaar)</label>
+                    <input type="text" class="form-control" name="personal_id" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Educational Background</label>
+                    <input type="text" class="form-control" name="education" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Skills & Competencies</label>
+                    <textarea class="form-control" name="skills" rows="2" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Certifications/Licenses</label>
+                    <textarea class="form-control" name="certifications" rows="2"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Profile Photo</label>
+                    <input type="file" class="form-control" name="profile_photo">
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

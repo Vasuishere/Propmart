@@ -1,0 +1,210 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Details | Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        {% include 'procurement/sidebar.html' %}
+        <!-- Main Content -->
+        <div class="flex-grow-1">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-light bg-white shadow-sm p-2">
+                <div class="container-fluid">
+                    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <form class="d-flex mx-auto">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    </form>
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="text-dark me-3"><i class="fas fa-envelope"></i> Message</a>
+                        <a href="#" class="text-dark me-3"><i class="fas fa-bell"></i> Notification</a>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle d-flex align-items-center text-dark" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="User"> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Company Details Section -->
+            <div class="container-fluid py-4">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h3 class="card-title mb-4">Company Information</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4 class="fw-bold text-primary">{{ vendor.company_name }}</h4>
+                                        <div class="row mt-3">
+                                            <div class="col-md-4 fw-bold">PAN Card:</div>
+                                            <div class="col-md-8">{{ vendor.company_pan_card }}</div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-4 fw-bold">Joining Date:</div>
+                                            <div class="col-md-8">{{ vendor.created_at|date:"jS F, Y" }}</div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-4 fw-bold">Status:</div>
+                                            <div class="col-md-8">
+                                                {% if vendor.is_active %}
+                                                <span class="badge bg-success">Active</span>
+                                                {% else %}
+                                                <span class="badge bg-danger">Inactive</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Section -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">Location Details</h5>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <form method="GET" action="">
+                                            <label for="locationSelect" class="form-label fw-bold">Choose Location:</label>
+                                            <select class="form-select" id="locationSelect" name="location_id" onchange="this.form.submit()">
+                                                <option value="" {% if not selected_location %}selected{% endif %} disabled>Select a location</option>
+                                                {% for location in locations %}
+                                                    <option value="{{ location.id }}" {% if selected_location.id == location.id %}selected{% endif %}>
+                                                        {{ location.location_name }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </form>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div id="locationDetails" class="mt-4">
+                                    {% if selected_location %}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-4 fw-bold">Address:</div>
+                                                    <div class="col-md-8">{{ selected_location.address }}</div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-4 fw-bold">GST Number:</div>
+                                                    <div class="col-md-8">{{ selected_location.company_gst }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-4 fw-bold">Created:</div>
+                                                    <div class="col-md-8">{{ selected_location.created_at|date:"jS F, Y" }}</div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-4 fw-bold">Status:</div>
+                                                    <div class="col-md-8">
+                                                        {% if selected_location.is_active %}
+                                                            <span class="badge bg-success">Active</span>
+                                                        {% else %}
+                                                            <span class="badge bg-danger">Inactive</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="{% url 'procurement:location_registration' vendor.id %}" class="btn btn-primary float-end">Add Address</a>
+                                        {% else %}
+                                        <div class="alert alert-info">
+                                            Please select a location to view details.
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Details Section -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">Contact Details</h5>
+                                    <div id="contactDetails">
+                                        {% if selected_location and contacts %}
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th>Position</th>
+                                                        <th>Phone</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for contact in contacts %}
+                                                    <tr>
+                                                        <td>{{ contact.contact_person }}</td>
+                                                        <td>{{ contact.email|default:"N/A" }}</td>
+                                                        <td>{{ contact.Position|default:"N/A" }}</td>
+                                                        <td>{{ contact.phone_number|default:"N/A" }}</td>
+                                                        <td>
+                                                            {% if contact.is_active %}
+                                                            <span class="badge bg-success">Active</span>
+                                                            {% else %}
+                                                            <span class="badge bg-danger">Inactive</span>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        {% elif selected_location and not contacts %}
+                                        <div class="alert alert-warning">No contacts found for this location.</div>
+                                        {% else %}
+                                        <div class="alert alert-info">Select a location to view contact details.</div>
+                                        {% endif %}
+                                        {% if selected_location %}
+    <a href="{% url 'procurement:contact_registration' selected_location.id %}" class="btn btn-primary">Add Contact</a>
+{% else %}
+    <button class="btn btn-primary" disabled>Add Contact</button>
+{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

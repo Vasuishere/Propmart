@@ -8,3 +8,5 @@ admin.site.register(VendorRegistration)
 admin.site.register(VendorLocation)
 admin.site.register(PurchaseOrder)
 admin.site.register(PurchaseOrderItem)
+
+

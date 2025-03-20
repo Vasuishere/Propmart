@@ -21,5 +21,6 @@ from hr import views
 
 
 urlpatterns = [
-    path('login', views.login, name='login')
+    path('Dashboard', views.Dashboard, name='Dashboard'),
+    path('EmpRegister', views.EmpRegister, name='EmpRegister'),
 ]

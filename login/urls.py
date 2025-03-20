@@ -21,5 +21,6 @@ from login import views
 
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', views.login, name='login')
 ]

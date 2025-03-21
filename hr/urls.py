@@ -22,5 +22,6 @@ from hr import views
 
 urlpatterns = [
     path('Dashboard', views.Dashboard, name='Dashboard'),
+    path('demo/', views.Demo, name='demo'),
     path('EmpRegister', views.EmpRegister, name='EmpRegister'),
 ]

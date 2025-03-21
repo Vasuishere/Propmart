@@ -3,24 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    {% comment %} <link rel="stylesheet" href="{% static 'css/styles.css' %}"> {% endcomment %}
+    <title>Login | Base Dashboard</title>
 </head>
-<body>
-    <div class="login-container">
-        <h1> Base Login Dashboard</h1>
+<body style="background: rgb(50, 42, 209); background: linear-gradient(90deg, #00d2ff 0%, #3a47d5 100%); rgba(9,9,121,1) 22%, rgba(0,212,255,1) 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <div style="background-color: white; border-radius: 10px; box-shadow: 0 15px 30px rgba(160, 20, 20, 0.2); padding: 40px; width: 400px; max-width: 90%;">
+        <!-- Logo placeholder - replace src with your actual logo -->
+        
+        <h1 style="color: #2e4057; font-size: 24px; margin-bottom: 20px; text-align: center;">Base Dashboard Login</h1>
+
+        <!-- Display Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div style="color: #e53e3e; font-weight: 500; font-size: 13px; padding: 10px 0; border-radius: 5px; margin-bottom: 15px;">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
         <form method="post">
             {% csrf_token %}
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+            <div style="margin-bottom: 20px;">
+                <label for="employee_id" style="display: block; color: #4a5568; font-size: 14px; font-weight: 500; margin-bottom: 8px;">Employee ID</label>
+                <input type="text" id="employee_id" name="employee_id" required style="width: 100%; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 15px; box-sizing: border-box;">
             </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+            <div style="margin-bottom: 20px;">
+                <label for="password" style="display: block; color: #4a5568; font-size: 14px; font-weight: 500; margin-bottom: 8px;">Password</label>
+                <input type="password" id="password" name="password" required style="width: 100%; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 15px; box-sizing: border-box;">
             </div>
-            <button type="submit">Login</button>
+            <p style="color: #e53e3e; font-weight: 500; font-size: 13px; margin-bottom: 20px;">If you don't have a password, please check your email inbox</p>
+            <button type="submit" style="background-color: #3182ce; color: white; border: none; border-radius: 6px; padding: 12px 20px; font-size: 16px; font-weight: 600; width: 100%; cursor: pointer;">Sign In</button>
         </form>
     </div>
 </body>
+
 </html>

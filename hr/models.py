@@ -35,6 +35,7 @@ class EmployeeProfile(models.Model):
     work_location = models.ForeignKey(WorkLocation, on_delete=models.CASCADE, null=True, blank=True)
 
     employee_id = models.CharField(max_length=50, unique=True)
+    password = models.CharField(max_length=50)
     contact_email = models.EmailField(unique=True)
     contact_phone = models.CharField(max_length=15)
     joining_date = models.DateField()

@@ -65,14 +65,16 @@
                                 <textarea name="address" id="id_address" class="form-control" rows="3" placeholder="Enter Full address" required></textarea>
                             </div>
                             
-                            <div class="mb-3">
+                            <div>
                                 <label for="id_company_gst" class="form-label">GST Number</label>
-                                <input type="text" name="company_gst" id="id_company_gst" class="form-control" placeholder="Enter GST number" required>
+                                <input type="text" name="company_gst" id="id_company_gst" class="form-control" placeholder="Enter GST number" required/>
                             </div>
+                            {% if errorMsg %}
+                                <span style="color: red;font-weight: bold;font-size: small;">{{errorMsg}}</span> 
+                            {% endif %}
                             
-                            
-                            <button type="submit" class="btn btn-primary w-100">Next</button>
-                        </form>
+                            <button type="submit" class="mt-2 btn btn-primary w-100">Next</button>
+                        </div>
                     </div>
                 </div>
                 <footer class="text-center mt-4 text-muted">

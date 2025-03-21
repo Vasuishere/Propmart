@@ -39,7 +39,7 @@ class VendorLocation(models.Model):
     )
     address = models.TextField(help_text="Complete location address")
     company_gst = models.CharField(
-        max_length=15, unique=True, help_text="GST number specific to this location (15 characters)"
+        max_length=15, help_text="GST number specific to this location (15 characters)"
     )
     created_at = models.DateTimeField(auto_now_add=True, help_text="Date when location was added")
     updated_at = models.DateTimeField(auto_now=True, help_text="Date when location details were last updated")

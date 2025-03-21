@@ -21,19 +21,24 @@ def location_registration(request, cmp_id):
     vendor = get_object_or_404(VendorRegistration, id=cmp_id)
 
     if request.method == 'POST':
+        cmpGst = request.POST['company_gst']
+        vendorModel = VendorLocation.objects
+        vendorData = vendorModel.filter(company_gst = cmpGst).values('id')
         location_form = VendorLocationForm(request.POST, vendor=vendor)
-        if location_form.is_valid():
+        if [item for item in vendorData if item['id'] == cmp_id] and location_form.is_valid():
             location = location_form.save(commit=False)
             location.vendor = vendor  # Always set the vendor from the URL
             location.save()
-            return redirect('procurement:contact_registration', vendor.id)  # Corrected redirect
+            insertedLocationId = vendorModel.filter(vendor_id=cmp_id).values('id').order_by('-id').first()
+            return redirect('procurement:contact_registration', insertedLocationId['id'])  # Corrected redirect
 
     else:
         location_form = VendorLocationForm(vendor=vendor)
 
     return render(request, 'procurement/location_registration.html', {
         'location_form': location_form,
-        'vendor': vendor
+        'vendor': vendor,
+        'errorMsg':'GST No. already linked with another company!'
     })
 
 # STEP 3: Contact Registration

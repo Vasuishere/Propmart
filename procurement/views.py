@@ -94,7 +94,6 @@ def company_details(request, cmp_id):
         'selected_location': selected_location,
         'contacts': contacts,
     }
-    
     return render(request, 'procurement/company_details.html', context)
 
 def contact(request):

@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from procurement import views
+from login.views import logout
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -31,6 +32,7 @@ urlpatterns = [
     path('company_details/<int:cmp_id>/', views.company_details, name='company_details'),
     path('register/', views.register_employee, name='register_employee'),
     path('demo/', views.demo, name='demo'),
+    path('logout/', logout, name='logout'),
     path('', views.index, name='index'),
     path('contact/', views.contact, name='contact'),
     path('vendor-registration/', views.vendor_registration, name='vendor_registration'),

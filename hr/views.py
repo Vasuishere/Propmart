@@ -64,5 +64,18 @@ def EmpRegister(request):
 def Dashboard(request):
     return render(request,"hr/Dashboard.html")
 
+def EmpDetails(request):
+    Emp = EmployeeProfile.objects.all()
+    context = {
+        "Emp" : Emp
+    }
+    return render(request,"hr/EmpDetails.html",context)
+
+def EmpMoreDetails(request, Emp_id):
+    employee = EmployeeProfile.objects.get(pk=Emp_id)
+    context = {
+        "employee" : employee
+    }
+    return render(request,"hr/EmpMoreDetails.html", context)
 def Demo(request):
     return render(request,"hr/Demo.html")

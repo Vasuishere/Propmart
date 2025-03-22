@@ -66,7 +66,7 @@
                         <option value="">Select Contact</option>
                         {% for contact in contacts %}
                             <option value="{{ contact.id }}">
-                                {{ contact.contact_person }} - {{ contact.contact_number }}
+                                {{ contact.contact_person }} - {{ contact.Position }} - {{ contact.phone_number }} 
                             </option>
                         {% endfor %}
                     </select>

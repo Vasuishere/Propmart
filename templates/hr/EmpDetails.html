@@ -45,7 +45,41 @@
             </nav>
 
             <!-- Main Content -->
-            
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Sr.No</th>
+                        <th scope="col">Employe Name</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Employe ID</th>
+                        <th scope="col">Joined At</th>
+                        <th scope="col">More</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for Emp in Emp %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ Emp.first_name }} {{Emp.last_name}}</td>
+                        <td>{{ Emp.department }}</td>
+                        <td>{{ Emp.employee_id }}</td>
+                        <td>{{ Emp.joining_date }}</td>
+                        <td>
+                            <!-- Dropdown for More Options -->
+                            <div class="dropdown">
+                                <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    &#x22EE;  <!-- Vertical Three Dots (⋮) -->
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{% url 'EmpMoreDetails' Emp.id %}">More Details</a></li>
+                                    <li><a class="dropdown-item text-danger" href="">Remove Company</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 

@@ -69,7 +69,7 @@ def company(request):
     cmp = VendorRegistration.objects.all()
     context = {
         'cmp': cmp,
-    }    
+    }
     return render(request, 'procurement/company.html', context)
 
 def company_details(request, cmp_id):

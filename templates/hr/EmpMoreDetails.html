@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Details | Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #3498db;
+        }
+        .section-title {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+        .document-link {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin-right: 10px;
+            color: #495057;
+            text-decoration: none;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s;
+        }
+        .document-link:hover {
+            background-color: #e9ecef;
+            border-color: #3498db;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        .info-value {
+            color: #212529;
+        }
+        .status-badge {
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div id="loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.9); z-index: 9999;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div class="d-flex" id="content" style="display: none;">
+        <!-- Sidebar -->
+        {% include 'hr/sidebar.html' %}
+
+        <!-- Main Content -->
+        <div class="flex-grow-1">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-light bg-white shadow-sm p-2">
+                <div class="container-fluid">
+                    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" 
+                            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" 
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <form class="d-flex mx-auto">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    </form>
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="text-dark me-3"><i class="fas fa-envelope"></i> Message</a>
+                        <a href="#" class="text-dark me-3"><i class="fas fa-bell"></i> Notification</a>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle d-flex align-items-center text-dark" href="#" 
+                               role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="User"> Vaibhav
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Employee Details Content -->
+            <div class="container-fluid py-4">
+                <div class="row mb-4">
+                    <div class="col-12 d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0">Employee Details</h2>
+                        <div>
+                            {% comment %} <a href="{% url 'hr:employee_edit' employee.id %}" class="btn btn-primary"> {% endcomment %}
+                                <i class="fas fa-edit me-2"></i>Edit
+                            </a>
+                            {% comment %} <a href="{% url 'hr:employee_list' %}" class="btn btn-outline-secondary ms-2"> {% endcomment %}
+                                <i class="fas fa-arrow-left me-2"></i>Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3 text-center mb-4 mb-md-0 mt-5">
+                                        {% comment %} <img src="{{ employee.profile_photo.url }}" alt="{{ employee.first_name }}" class="profile-image mb-3"> {% endcomment %}
+                                        <h4>{{ employee.first_name }} {{ employee.last_name }}</h4>
+                                        <p class="text-muted mb-2">{{ employee.job_title }}</p>
+                                        <span class="badge bg-{{ employee.is_active|yesno:'success,danger' }} status-badge">
+                                            {{ employee.is_active|yesno:'Active,Inactive' }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <h5 class="section-title">Personal Information</h5>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="info-label">Employee ID</div>
+                                                    <div class="info-value">{{ employee.employee_id }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="info-label">Personal ID Number</div>
+                                                    <div class="info-value">{{ employee.personal_id_number }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="info-label">Department</div>
+                                                    <div class="info-value">{{ employee.department }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="info-label">Work Location</div>
+                                                    <div class="info-value">{{ employee.work_location }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="info-label">Joining Date</div>
+                                                    <div class="info-value">{{ employee.joining_date|date:"jS F, Y" }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="info-label">Salary</div>
+                                                    <div class="info-value">₹{{ employee.salary|floatformat:2 }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="section-title">Contact Information</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <div class="info-label">Email</div>
+                                            <div class="info-value">
+                                                <a href="mailto:{{ employee.contact_email }}">{{ employee.contact_email }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <div class="info-label">Phone</div>
+                                            <div class="info-value">
+                                                <a href="tel:{{ employee.contact_phone }}">{{ employee.contact_phone }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <div class="info-label">Current Address</div>
+                                            <div class="info-value">{{ employee.current_address }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <div class="info-label">Permanent Address</div>
+                                            <div class="info-value">{{ employee.permanent_address }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <div class="info-label">Emergency Contact</div>
+                                            <div class="info-value">{{ employee.emergency_contact_name }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <div class="info-label">Emergency Phone</div>
+                                            <div class="info-value">
+                                                <a href="tel:{{ employee.emergency_contact_phone }}">{{ employee.emergency_contact_phone }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documents -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="section-title">Documents</h5>
+                                <div class="row">
+                                    <div class="col-12 mb-4">
+                                        <div class="d-flex flex-wrap">
+                                            <a href="{{ employee.marksheet_10.url }}" class="document-link mb-2" target="_blank">
+                                                <i class="fas fa-file-pdf me-2"></i>10th Marksheet
+                                            </a>
+                                            <a href="{{ employee.marksheet_12.url }}" class="document-link mb-2" target="_blank">
+                                                <i class="fas fa-file-pdf me-2"></i>12th Marksheet
+                                            </a>
+                                            <a href="{{ employee.graduation_degree.url }}" class="document-link mb-2" target="_blank">
+                                                <i class="fas fa-file-pdf me-2"></i>Graduation Degree
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Loader Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Show loader
+            var loader = document.getElementById("loader");
+            var content = document.getElementById("content");
+            
+            // Hide loader and show content after a delay
+            setTimeout(function() {
+                if (loader) {
+                    loader.style.display = "none";
+                }
+                if (content) {
+                    content.style.display = "block";
+                }
+            }, 1000); // 1 second delay for demo
+        });
+    </script>
+</body>
+</html>

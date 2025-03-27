@@ -17,7 +17,7 @@
                 <div style="color: #e53e3e; font-weight: 500; font-size: 13px; padding: 10px 0; border-radius: 5px; margin-bottom: 15px;">{{ message }}</div>
             {% endfor %}
         {% endif %}
-
+        {% include 'loader/loader.html' %}
         <form method="post">
             {% csrf_token %}
             <div style="margin-bottom: 20px;">

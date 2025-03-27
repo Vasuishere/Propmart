@@ -1,4 +1,3 @@
-# views.py
 from django.shortcuts import render, redirect,get_object_or_404
 from .forms import VendorRegistrationForm,VendorLocationForm,LocationContactForm,EmployeeForm
 from .models import VendorRegistration,VendorLocation,LocationContact

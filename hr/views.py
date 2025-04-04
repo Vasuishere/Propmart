@@ -163,5 +163,6 @@ def EmpMoreDetails(request, Emp_id):
         "employee" : employee
     }
     return render(request,"hr/EmpMoreDetails.html", context)
+
 def Demo(request):
-    return render(request,"hr/Demo.html")
+    return render(request,"hr/demo.html")

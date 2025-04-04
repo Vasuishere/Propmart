@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Profile Registration</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+        .form-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .form-progress-step {
+            flex-grow: 1;
+            text-align: center;
+            padding: 10px;
+            background-color: #dadada;
+            margin: 0 5px;
+            border-radius: 5px;
+        }
+        .form-progress-step.active {
+            background-color: #b4d123;
+            color: white;
+        }
+        .form-label i {
+            min-width: 20px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h3><i class="fas fa-building"></i> Employee Profile Registration</h3>
+            </div>
+            {% include 'loader/loader.html' %}
+            <div class="card-body">
+                <!-- Form Progress Indicator -->
+                <div class="form-progress">
+                    <div class="form-progress-step active"><i class="fas fa-building"></i> Company Details</div>
+                    <div class="form-progress-step"><i class="fas fa-code-branch"></i> Branch</div>
+                    <div class="form-progress-step"><i class="fas fa-file-certificate"></i> Government Proofs</div>
+                    <div class="form-progress-step"><i class="fas fa-user-tie"></i> User Details</div>
+                    <div class="form-progress-step"><i class="fas fa-university"></i> Bank Account Details</div>
+                </div>
+
+                <form id="employeeRegistrationForm" method="POST" action="{% url 'EmpRegister' %}" enctype="multipart/form-data">
+
+                    {% csrf_token %}
+                    
+                    <!-- Page 1: Company Information -->
+                    <div class="step active" id="companyInfoStep">
+                        <h4 class="mb-4"><i class="fas fa-building me-2"></i>Company Information</h4>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-building"></i> Company Name</label>
+                                <input type="text" name="company_name" class="form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-globe"></i> Company Website</label>
+                                <input type="text" name="company_website" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-file-signature"></i> Company Legal Name</label>
+                                <input type="text" name="company_legal_name" class="form-control" required>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-tag"></i> Company Type</label>
+                                <select name="company_type" class="form-select" required>
+                                    <option value="">Select Type</option>
+                                    <option value="seller">Seller</option>
+                                    <option value="buyer">Buyer</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-envelope"></i> Company Email</label>
+                                <input type="email" name="company_email" class="form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-phone"></i> Contact Phone</label>
+                                <input type="text" name="contact_phone" class="form-control" required>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-phone-alt"></i> Emergency Contact Phone</label>
+                                <input type="text" name="emergency_contact_phone" class="form-control" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-file-invoice"></i> Company Billing Address</label>
+                                <textarea name="company_billing_address" class="form-control" rows="3" required></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-map-marker-alt"></i> Permanent Address</label>
+                                <textarea name="permanent_address" class="form-control" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="text-end mt-4">
+                            <button type="button" class="btn btn-primary next-step">Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Page 2: Branch Details -->
+                    <div class="step" id="branchDetailsStep">
+                        <h4 class="mb-4"><i class="fas fa-code-branch me-2"></i>Branch Details</h4>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-city"></i> Branch City</label>
+                                <input type="text" name="branch_city" class="form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-receipt"></i> Branch GST</label>
+                                <input type="text" name="branch_gst" class="form-control" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label"><i class="fas fa-map-marked"></i> Branch Full Address</label>
+                                <textarea name="branch_address" class="form-control" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-secondary prev-step"><i class="fas fa-arrow-left"></i> Previous</button>
+                            <button type="button" class="btn btn-primary next-step">Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <!-- Page 3: Government Proofs -->
+                    <div class="step" id="governmentProofsStep">
+                        <h4 class="mb-4"><i class="fas fa-file-certificate me-2"></i>Government Proofs</h4>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-id-card"></i> PAN Card Number</label>
+                                <input type="text" name="pan_card_number" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-certificate"></i> MSME Certificate</label>
+                                <input type="file" name="msme_certificate" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-file-upload"></i> Company Registration</label>
+                                <input type="file" name="company_registration" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-file-contract"></i> GST Certificate</label>
+                                <input type="file" name="gst_certificate" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-secondary prev-step">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn btn-primary next-step">Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Page 4: Branch User -->
+                    <div class="step" id="branchUserStep">
+                        <h4 class="mb-4"><i class="fas fa-user-tie me-2"></i>Branch User</h4>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-user"></i> User Name</label>
+                                <input type="text" name="user_name" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-briefcase"></i> Position</label>
+                                <input type="text" name="user_position" class="form-control" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-phone-alt"></i> Contact Number</label>
+                                <input type="text" name="user_contact" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-at"></i> User Email ID</label>
+                                <input type="email" name="user_email" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-secondary prev-step"><i class="fas fa-arrow-left"></i> Previous</button>
+                            <button type="button" class="btn btn-primary next-step">Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Page 5: Bank Details -->
+                    <div class="step" id="bankDetailsStep">
+                        <h4 class="mb-4"><i class="fas fa-university me-2"></i>Bank Details</h4>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-university"></i> Bank Name</label>
+                                <input type="text" name="bank_name" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-money-check"></i> Bank Account Number</label>
+                                <input type="text" name="bank_account_number" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-check-double"></i> Re-enter Bank Account Number</label>
+                                <input type="text" name="bank_account_number_confirmation" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-landmark"></i> IFSC Code</label>
+                                <input type="text" name="bank_ifsc_code" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-secondary prev-step"><i class="fas fa-arrow-left"></i> Previous</button>
+                            <button type="submit" class="btn btn-success">
+                                Submit <i class="fas fa-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const steps = document.querySelectorAll(".step");
+            let currentStep = 0;
+            const progressSteps = document.querySelectorAll(".form-progress-step");
+    
+            function updateSteps() {
+                steps.forEach((step, index) => {
+                    step.classList.toggle("active", index === currentStep);
+                    progressSteps[index].classList.toggle("active", index === currentStep);
+                });
+            }
+    
+            document.querySelectorAll(".next-step").forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    if (currentStep < steps.length - 1) {
+                        currentStep++;
+                        updateSteps();
+                    }
+                });
+            });
+    
+            document.querySelectorAll(".prev-step").forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    if (currentStep > 0) {
+                        currentStep--;
+                        updateSteps();
+                    }
+                });
+            });
+    
+            updateSteps();
+        });
+    </script>
+</body>
+</html>

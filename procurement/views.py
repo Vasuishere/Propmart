@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect,get_object_or_404
+from django.contrib import messages
 from .forms import VendorRegistrationForm,VendorLocationForm,LocationContactForm,EmployeeForm
 from .models import VendorRegistration,VendorLocation,LocationContact
 
@@ -100,17 +101,14 @@ def contact(request):
 
 # views.py
 def purchase_order_view(request):
-    # Get all active companies for the initial dropdown
     companies = VendorRegistration.objects.filter(is_active=True)
     
-    # Initialize variables
     locations = None
     contacts = None
     selected_company = None
     selected_location = None
     gst_list = None
     
-    # Get selected company ID from request
     company_id = request.GET.get('company_id')
     
     if company_id:
@@ -153,7 +151,6 @@ def purchase_order_view(request):
             # Handle case where company doesn't exist
             selected_company = None
             locations = None
-
     context = {
         'companies': companies,
         'locations': locations,
@@ -177,5 +174,7 @@ def register_employee(request):
             return redirect('procurement:success_page')  # Change to your success URL
     else:
         form = EmployeeForm()
-
     return render(request, 'procurement/employee_registration.html', {'form': form})
+
+def Company_registration(request):
+    return render(request, "procurement/CompanyRegistration.html")
